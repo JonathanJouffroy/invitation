@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionnaire de satisfaction — Soirée Partage</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Marcellus&display=swap');
+
+  :root{
+    --gold:#c9a24b;
+    --gold-lt:#e9cf8e;
+    --ink:#0e0d0c;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    min-height:100%;
+    background:
+      radial-gradient(ellipse at 50% 0%, #2a2420 0%, #14110e 55%, #0a0908 100%);
+    font-family:'Cormorant Garamond', serif;
+    color:#f4ead9;
+  }
+
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:56px 24px 80px;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:44px;
+  }
+  header .eyebrow{
+    font-family:'Marcellus', serif;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--gold-lt);
+    opacity:.85;
+  }
+  h1{
+    font-family:'Marcellus', serif;
+    font-weight:400;
+    font-size:clamp(26px, 5vw, 34px);
+    margin:10px 0 6px;
+    color:#f7ecd8;
+  }
+  header p{
+    font-style:italic;
+    opacity:.75;
+    font-size:17px;
+    margin:0;
+  }
+
+  .section{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(233,207,142,.18);
+    border-radius:6px;
+    padding:28px 26px;
+    margin-bottom:26px;
+  }
+  .section h2{
+    font-family:'Marcellus', serif;
+    font-weight:400;
+    font-size:20px;
+    color:var(--gold);
+    margin:0 0 4px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section h2 .icon{ font-size:18px; }
+  .section .sub{
+    font-style:italic;
+    opacity:.65;
+    font-size:15px;
+    margin:0 0 20px;
+  }
+
+  .question{ margin-bottom:20px; }
+  .question:last-child{ margin-bottom:0; }
+  .question label.qlabel{
+    display:block;
+    font-size:17px;
+    margin-bottom:10px;
+    color:#f4ead9;
+  }
+
+  /* star rating */
+  .stars{
+    display:flex;
+    flex-direction:row-reverse;
+    justify-content:flex-end;
+    gap:6px;
+  }
+  .stars input{
+    position:absolute;
+    opacity:0;
+    width:1px;
+    height:1px;
+  }
+  .stars label{
+    font-size:28px;
+    line-height:1;
+    color:rgba(233,207,142,.25);
+    cursor:pointer;
+    transition:color .15s ease, transform .15s ease;
+  }
+  .stars label:hover,
+  .stars label:hover ~ label{
+    color:var(--gold-lt);
+    transform:scale(1.08);
+  }
+  .stars input:checked ~ label{
+    color:var(--gold-lt);
+  }
+
+  textarea{
+    width:100%;
+    background:rgba(0,0,0,.35);
+    border:1px solid rgba(233,207,142,.25);
+    border-radius:4px;
+    color:#f4ead9;
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px;
+    padding:12px;
+    resize:vertical;
+    min-height:70px;
+  }
+  textarea::placeholder{ color:rgba(244,234,217,.4); }
+  textarea:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+
+  button[type="submit"]{
+    display:block;
+    width:100%;
+    margin-top:8px;
+    padding:16px;
+    background:linear-gradient(155deg, #c9a24b, #8a6a2e);
+    border:none;
+    border-radius:4px;
+    color:#1a1509;
+    font-family:'Marcellus', serif;
+    font-size:15px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  button[type="submit"]:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 24px -8px rgba(201,162,75,.5);
+  }
+
+  .thanks{
+    display:none;
+    text-align:center;
+    padding:60px 20px;
+  }
+  .thanks .icon{ font-size:40px; margin-bottom:16px; }
+  .thanks h2{
+    font-family:'Marcellus', serif;
+    font-weight:400;
+    font-size:26px;
+    color:var(--gold-lt);
+    margin:0 0 10px;
+  }
+  .thanks p{
+    font-style:italic;
+    opacity:.75;
+    font-size:17px;
+  }
+
+  form.hidden{ display:none; }
+  .thanks.visible{ display:block; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Soirée Partage</div>
+    <h1>Votre avis compte</h1>
+    <p>Quelques minutes pour nous dire comment vous avez vécu la soirée.</p>
+  </header>
+
+  <form id="survey">
+
+    <div class="section">
+      <h2><span class="icon">🥙</span> Le Repas</h2>
+      <p class="sub">Naan tenders maison, préparés par Sarah &amp; Jonathan</p>
+
+      <div class="question">
+        <label class="qlabel">Qualité et goût des naan tenders</label>
+        <div class="stars">
+          <input type="radio" name="repas_naan" id="rn5" value="5"><label for="rn5">★</label>
+          <input type="radio" name="repas_naan" id="rn4" value="4"><label for="rn4">★</label>
+          <input type="radio" name="repas_naan" id="rn3" value="3"><label for="rn3">★</label>
+          <input type="radio" name="repas_naan" id="rn2" value="2"><label for="rn2">★</label>
+          <input type="radio" name="repas_naan" id="rn1" value="1"><label for="rn1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">Un commentaire sur le repas ?</label>
+        <textarea name="repas_commentaire" placeholder="Ce que vous avez aimé, ou pas..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><span class="icon">💆</span> Le Massage</h2>
+      <p class="sub">Pour détendre tout le corps après un long voyage à la Réunion</p>
+
+      <div class="question">
+        <label class="qlabel">Qualité du massage</label>
+        <div class="stars">
+          <input type="radio" name="massage_qualite" id="mq5" value="5"><label for="mq5">★</label>
+          <input type="radio" name="massage_qualite" id="mq4" value="4"><label for="mq4">★</label>
+          <input type="radio" name="massage_qualite" id="mq3" value="3"><label for="mq3">★</label>
+          <input type="radio" name="massage_qualite" id="mq2" value="2"><label for="mq2">★</label>
+          <input type="radio" name="massage_qualite" id="mq1" value="1"><label for="mq1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">Niveau de détente ressenti</label>
+        <div class="stars">
+          <input type="radio" name="massage_detente" id="md5" value="5"><label for="md5">★</label>
+          <input type="radio" name="massage_detente" id="md4" value="4"><label for="md4">★</label>
+          <input type="radio" name="massage_detente" id="md3" value="3"><label for="md3">★</label>
+          <input type="radio" name="massage_detente" id="md2" value="2"><label for="md2">★</label>
+          <input type="radio" name="massage_detente" id="md1" value="1"><label for="md1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">Un commentaire sur le massage ?</label>
+        <textarea name="massage_commentaire" placeholder="Ce que vous avez aimé, ou pas..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><span class="icon">🎲</span> Le Jeu de l'oie</h2>
+      <p class="sub">La version un brin épicée</p>
+
+      <div class="question">
+        <label class="qlabel">Votre plaisir sur le jeu de l'oie</label>
+        <div class="stars">
+          <input type="radio" name="jeu_plaisir" id="jp5" value="5"><label for="jp5">★</label>
+          <input type="radio" name="jeu_plaisir" id="jp4" value="4"><label for="jp4">★</label>
+          <input type="radio" name="jeu_plaisir" id="jp3" value="3"><label for="jp3">★</label>
+          <input type="radio" name="jeu_plaisir" id="jp2" value="2"><label for="jp2">★</label>
+          <input type="radio" name="jeu_plaisir" id="jp1" value="1"><label for="jp1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">Un commentaire sur le jeu ?</label>
+        <textarea name="jeu_commentaire" placeholder="Ce que vous avez aimé, ou pas..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><span class="icon">🎬</span> Le Cinéma</h2>
+      <p class="sub">Spider-Man: Brand New Day, le lendemain</p>
+
+      <div class="question">
+        <label class="qlabel">Votre avis sur la séance ciné</label>
+        <div class="stars">
+          <input type="radio" name="cinema_avis" id="ci5" value="5"><label for="ci5">★</label>
+          <input type="radio" name="cinema_avis" id="ci4" value="4"><label for="ci4">★</label>
+          <input type="radio" name="cinema_avis" id="ci3" value="3"><label for="ci3">★</label>
+          <input type="radio" name="cinema_avis" id="ci2" value="2"><label for="ci2">★</label>
+          <input type="radio" name="cinema_avis" id="ci1" value="1"><label for="ci1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">L'expérience vibrante</label>
+        <div class="stars">
+          <input type="radio" name="cinema_vibrante" id="cv5" value="5"><label for="cv5">★</label>
+          <input type="radio" name="cinema_vibrante" id="cv4" value="4"><label for="cv4">★</label>
+          <input type="radio" name="cinema_vibrante" id="cv3" value="3"><label for="cv3">★</label>
+          <input type="radio" name="cinema_vibrante" id="cv2" value="2"><label for="cv2">★</label>
+          <input type="radio" name="cinema_vibrante" id="cv1" value="1"><label for="cv1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">Un commentaire sur le film ou la sortie ?</label>
+        <textarea name="cinema_commentaire" placeholder="Ce que vous avez aimé, ou pas..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><span class="icon">✨</span> Ambiance générale</h2>
+      <p class="sub">L'esprit "partage" de la soirée, dans son ensemble</p>
+
+      <div class="question">
+        <label class="qlabel">Ambiance générale de la soirée</label>
+        <div class="stars">
+          <input type="radio" name="ambiance_globale" id="ag5" value="5"><label for="ag5">★</label>
+          <input type="radio" name="ambiance_globale" id="ag4" value="4"><label for="ag4">★</label>
+          <input type="radio" name="ambiance_globale" id="ag3" value="3"><label for="ag3">★</label>
+          <input type="radio" name="ambiance_globale" id="ag2" value="2"><label for="ag2">★</label>
+          <input type="radio" name="ambiance_globale" id="ag1" value="1"><label for="ag1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">Recommanderiez-vous cette soirée ?</label>
+        <div class="stars">
+          <input type="radio" name="ambiance_recommande" id="ar5" value="5"><label for="ar5">★</label>
+          <input type="radio" name="ambiance_recommande" id="ar4" value="4"><label for="ar4">★</label>
+          <input type="radio" name="ambiance_recommande" id="ar3" value="3"><label for="ar3">★</label>
+          <input type="radio" name="ambiance_recommande" id="ar2" value="2"><label for="ar2">★</label>
+          <input type="radio" name="ambiance_recommande" id="ar1" value="1"><label for="ar1">★</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="qlabel">Une suggestion pour une prochaine soirée ?</label>
+        <textarea name="ambiance_commentaire" placeholder="Vos idées, vos envies..."></textarea>
+      </div>
+    </div>
+
+    <input type="hidden" name="_subject" value="Nouveau retour — Soirée Partage">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+
+    <button type="submit">Envoyer mes réponses</button>
+  </form>
+
+  <div class="thanks" id="thanks">
+    <div class="icon">🥂</div>
+    <h2>Merci infiniment</h2>
+    <p>Votre retour a bien été pris en compte.</p>
+  </div>
+
+  <p class="error" id="error" style="display:none; text-align:center; font-style:italic; opacity:.75; color:#e9cf8e;">
+    Un problème est survenu lors de l'envoi. Merci de réessayer.
+  </p>
+
+</div>
+
+<script>
+  const form = document.getElementById('survey');
+  const thanks = document.getElementById('thanks');
+  const errorMsg = document.getElementById('error');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg.style.display = 'none';
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi en cours…';
+
+    try {
+      const data = new FormData(form);
+      const res = await fetch('https://formsubmit.co/ajax/jonathanjouffroy@gmail.com', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: data
+      });
+      if (res.ok) {
+        form.classList.add('hidden');
+        thanks.classList.add('visible');
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      errorMsg.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Envoyer mes réponses';
+    }
+  });
+</script>
+
+</body>
+</html>
